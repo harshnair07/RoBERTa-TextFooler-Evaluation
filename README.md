@@ -24,17 +24,23 @@ The attack pipeline is explicitly engineered for high-performance computing envi
 * **PyTorch-Native Constraints:** To ensure cross-platform compatibility and bypass Windows `tensorflow-text` dependency loops, the Universal Sentence Encoder was replaced with a PyTorch-compatible `WordEmbeddingDistance` constraint.
 * **Localized Asset Management:** NLTK corpora and Hugging Face caches are routed to local project directories (`./nltk_data/`) to prevent system-level permission errors in shared lab environments.
 
-## 📊 Preliminary Results
-The model was tested against a balanced subset of unseen HC3 data. Under strict semantic and grammatical attack constraints, the fine-tuned RoBERTa model demonstrated exceptional robustness:
+## 📊 Evaluation Results
+The model was tested against an unseen HC3 data split under two different adversarial attack severities. 
 
-| Metric | Score | Description |
-| :--- | :--- | :--- |
-| **Original Accuracy** | `100.0%` | Baseline accuracy on the pristine test split. |
-| **Accuracy Under Attack** | `94.0%` | Accuracy maintained during active adversarial perturbation. |
-| **Attack Success Rate** | `6.0%` | Percentage of texts the attacker successfully flipped (AI to Human). |
-| **Avg. Perturbation** | `3.18%` | Average percentage of words altered in successful attacks. |
+**Attack 1: Strict Semantic Constraints (Realistic)**
+*Limits: Cosine Similarity > 0.5, Exact POS matching.*
+* **Original Accuracy:** 100.0%
+* **Accuracy Under Attack:** 94.0%
+* **Attack Success Rate:** 6.0%
 
-*Conclusion:* The model effectively resists standard semantic substitution attacks, proving it relies on deeper linguistic structures rather than brittle keywords.
+**Attack 2: Aggressive Constraints (Stress Test)**
+*Limits: Cosine Similarity > 0.2, Word deletions permitted.*
+* **Original Accuracy:** 100.0%
+* **Accuracy Under Attack:** 89.5%
+* **Attack Success Rate:** 10.5%
+* **Average Perturbation:** 2.59% words altered
+
+*Conclusion:* The fine-tuned RoBERTa model demonstrates exceptional robustness. To successfully force a misclassification (achieving the 10.5% success rate), the adversarial attacker had to degrade the text so severely that it compromised human readability.
 
 ## ⚙️ Installation & Setup
 
